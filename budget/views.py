@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, reverse
+from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -46,3 +47,11 @@ class BudgetUpdateView(LoginRequiredMixin, generic.UpdateView):
     def get_success_url(self):
         return reverse('budget:list')
 
+
+class BudgetDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Budget
+    success_url = reverse_lazy('budget:list')
+
+    def get_queryset(self):
+        queryset = super(BudgetDeleteView, self).get_queryset()
+        return queryset.filter(user=self.request.user)
