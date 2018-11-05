@@ -4,7 +4,7 @@
     {% for budget in budgets %}
         <div class="row budget-row">
             <div class="col-4 budget-name">
-                <a href="{% %}">{{budget.name}}</a> {{budget.amount}}원</div>
+                <a href="{% url 'budget:update' budget.pk %}">{{budget.name}}</a> {{budget.amount}}원</div>
 
         </div>
     {% endfor %}

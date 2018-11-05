@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, reverse
+from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .models import Budget
 from .forms import BudgetForm
@@ -28,3 +30,19 @@ def budget_create(request):
         form = BudgetForm()
         context = { 'form': form }
         return render(request, 'budget/budget_form.html', context)
+
+
+
+class BudgetUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Budget
+    form_class = BudgetForm
+    context_object_name = 'budget'
+    template_name = 'budget/budget_form.html'
+
+    def get_queryset(self):
+        queryset = super(BudgetUpdateView, self).get_queryset()
+        return queryset.filter(user=self.request.user)
+
+    def get_success_url(self):
+        return reverse('budget:list')
+
