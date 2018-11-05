@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.urls import reverse
 from django.test import TestCase
 from .models import Budget
 
@@ -19,3 +20,24 @@ class BudgetModelTestCase(TestCase):
         Budget.objects.create(name='교통비', amount=55000, user=self.user)
         new_count = Budget.objects.count()
         self.assertNotEqual(old_count, new_count)
+
+
+class BudgetViewTestCase(TestCase):
+    def create_user(self, name, pw):
+        user = User.objects.create(username=name)
+        user.set_password(pw)
+        user.save()
+        return user
+
+    def setUp(self):
+        self.user = self.create_user('tom', '12345')
+        self.client.login(username='tom', password='12345')
+        self.budget = Budget.objects.create(name="test budget", amount=1000, user=self.user)
+
+    def test_view_can_list_budgets(self):
+        for i in range(0,5):
+            Budget.objects.create(name="test budget name #{}".format(i), amount=i, user=self.user)
+
+        res = self.client.get(reverse('budget:list'))
+        self.assertEqual(res.status_code, 200)
+

@@ -1,0 +1,25 @@
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a href="{% url 'todo:list' %}" class='navbar-brand'>todolist✍️</a>
+
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class='nav-link' href='{% url "todo:list"  %}'>{{user.username}}</a>
+          </li>
+          <li class="nav-item">
+            <a class='nav-link' href='{% url "user:logout"  %}'>로그아웃</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class='nav-link' href='{% url "user:login"  %}'>로그인</a>
+          </li>
+          {% endif %}
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
