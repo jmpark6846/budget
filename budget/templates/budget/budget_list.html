@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 <div id="budget-list-page">
+    {% for budget in budgets %}
+        <div class="row budget-row">
+            <div class="col-4 budget-name">
+                <a href="{% %}">{{budget.name}}</a> {{budget.amount}}원</div>
 
+        </div>
+    {% endfor %}
 </div>
 {% endblock %}

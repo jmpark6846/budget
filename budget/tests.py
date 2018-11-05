@@ -41,3 +41,7 @@ class BudgetViewTestCase(TestCase):
         res = self.client.get(reverse('budget:list'))
         self.assertEqual(res.status_code, 200)
 
+    def test_view_can_create_budget(self):
+        budget_data = { 'name': '교통', 'amount': 1000, 'user': self.user}
+        res = self.client.post(reverse('budget:create'), budget_data)
+        self.assertEqual(res.status_code, 302)  # 생성 성공시 리다이렉트
