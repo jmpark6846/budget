@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 <div id="budget-list-page">
+    <h4>예산 잡을 금액: {{ need_budgeted }}</h4>
+    <div>{% now "F" %} 자금: {{ funds }}</div>
+    <div>지금까지 예산: {{ budgeted }}</div>
     <div class="control-row mb-2">
         <a href="{% url 'budget:create' %}" class="btn btn-success">생성</a>
     </div>

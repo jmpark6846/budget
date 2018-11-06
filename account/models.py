@@ -9,6 +9,7 @@ class Account(models.Model):
     created = models.DateTimeField('생성날짜', auto_now_add=True)
     updated = models.DateTimeField('수정날짜', auto_now=True)
 
+
     def __str__(self):
         return '{}의 계정: {}'.format(self.user.username, self.name)
 
