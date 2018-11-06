@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>다음 계정을 삭제합니까?</h3>
+<h3>{{ account.name }}</h3>
+<form action="{% url 'account:delete' account.pk %}" method="POST">
+  {% csrf_token %}
+  <input class='btn btn-success' type='submit' value='삭제합니다'>
+</form>
+{% endblock %}

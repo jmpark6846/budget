@@ -51,7 +51,7 @@ class BudgetViewTestCase(TestCase):
         res = self.client.post(reverse('budget:update', kwargs={'pk': self.budget.pk}), budget_data)
         self.assertEqual(res.status_code, 302)
 
-    def test_view_can_delete_todo(self):
+    def test_view_can_delete_budget(self):
         old_count = Budget.objects.count()
         self.client.delete(reverse('budget:delete', kwargs={'pk': self.budget.pk}))
         new_count = Budget.objects.count()

@@ -32,3 +32,16 @@ def account_detail(request, pk):
     account = get_object_or_404(Account, pk=pk, user=request.user)
     context = { 'account': account }
     return render(request, 'account/account_detail.html', context)
+
+
+
+@login_required
+def account_delete(request, pk):
+    account = get_object_or_404(Account, pk=pk, user=request.user)
+
+    if request.method == 'POST':
+        account.delete()
+        return redirect(reverse('account:list'))
+    else:
+        context = { 'account': account }
+        return render(request, 'account/account_confirm_delete.html', context)
