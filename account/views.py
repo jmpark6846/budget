@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -26,3 +26,9 @@ class AccountCreateView(generic.CreateView):
         form.instance.user = self.request.user
         return super(AccountCreateView, self).form_valid(form)
 
+
+@login_required
+def account_detail(request, pk):
+    account = get_object_or_404(Account, pk=pk, user=request.user)
+    context = { 'account': account }
+    return render(request, 'account/account_detail.html', context)

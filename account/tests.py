@@ -48,3 +48,8 @@ class AccountViewTestCase(TestCase):
         }
         res = self.client.post(reverse('account:create'), account_data)
         self.assertEqual(res.status_code, 302)
+
+
+    def test_view_can_show_account_detail(self):
+        res = self.client.get(reverse('account:detail', kwargs={'pk': self.account.pk}))
+        self.assertEqual(res.status_code,200)
