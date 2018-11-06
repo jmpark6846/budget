@@ -31,7 +31,7 @@ class AccountViewTestCase(TestCase):
     def setUp(self):
         self.user = self.create_user('tom', '12345')
         self.client.login(username='tom', password='12345')
-        self.account = Account.objects.create(name='체크카', amount='1000', user=self.user)
+        self.account = Account.objects.create(name='체크카드', amount='1000', user=self.user)
 
     def test_view_can_list_accounts(self):
         for i in range(0,5):
@@ -39,3 +39,12 @@ class AccountViewTestCase(TestCase):
 
         res = self.client.get(reverse('account:list'))
         self.assertEqual(res.status_code, 200)
+
+
+    def test_view_can_create_accounts(self):
+        account_data = {
+            'name': '체크카드',
+            'amount': 5000,
+        }
+        res = self.client.post(reverse('account:create'), account_data)
+        self.assertEqual(res.status_code, 302)

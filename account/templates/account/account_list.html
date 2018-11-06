@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="account-list-page">
+    <div class="control-row">
+        <a href="{% url 'account:create' %}" class="btn btn-success">생성</a>
+    </div>
     {% for account in accounts %}
         <h3>{{account.name}}</h3>
     {% endfor %}
