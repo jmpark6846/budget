@@ -22,4 +22,5 @@ urlpatterns = [
     path('', budget_views.budget_list, name='index'),
     path('user/', include('user.urls')),
     path('budget/', include('budget.urls')),
+    path('account/', include('account.urls')),
 ]
