@@ -6,32 +6,16 @@ a:hover{
     text-decoration: none!important;
 }
 
-.todo-title.checked{
-    text-decoration: line-through;
-}
 
 .dropdown{
     display: inline-block;
 }
 
-.todo-row .duedate{
-    display: inline-block;
-}
 
-.todo-row .meta{
+.budget-list-section a{
+    display: contents;
+}
+.budget-row{
     display: flex;
-}
-
-.todo-row .priority{
-    width: 10px;
-}
-
-// Large devices (desktops, 992px and up)
-@media (min-width: 992px) {
-    #todo-form input[name=duedate]{
-        width:106px;
-    }
-    #todo-form select[name=priority]{
-        width:120px;
-    }
+    align-items: center;
 }
