@@ -5,6 +5,13 @@ from django.test import TestCase
 from .models import BudgetCategory, Budget, BudgetItem
 
 # Create your tests here.
+
+def create_user(name, pw):
+    user = User.objects.create(username=name)
+    user.set_password(pw)
+    user.save()
+    return user
+
 class BudgetCategoryModelTestCase(TestCase):
     def create_user(self, name, pw):
         user = User.objects.create(username=name)
@@ -23,6 +30,24 @@ class BudgetCategoryModelTestCase(TestCase):
         self.assertNotEqual(old_count, new_count)
 
 
+class BudgetModelTestCase(TestCase):
+    def setUp(self):
+        self.user = create_user('tom', '12345')
+        self.client.login(username='tom', password='12345')
+
+    def test_model_can_get_budgted(self):
+        budget = Budget.objects.create(year=2018, month=9, user=self.user)
+
+        category1 = BudgetCategory.objects.create(name='교통', amount=1000, user=self.user)
+        category2 = BudgetCategory.objects.create(name='생활', amount=7000, user=self.user)
+        item1=BudgetItem.objects.create(category=category1)
+        item2=BudgetItem.objects.create(category=category2)
+
+        budget.items.add(item1)
+        budget.items.add(item2)
+
+        self.assertEqual(budget.budgeted(), 8000)
+
 class BudgetViewTestCase(TestCase):
     def create_user(self, name, pw):
         user = User.objects.create(username=name)
@@ -34,7 +59,7 @@ class BudgetViewTestCase(TestCase):
         self.user = self.create_user('tom', '12345')
         self.client.login(username='tom', password='12345')
         category = BudgetCategory.objects.create(name='교통비', amount=55000, user=self.user)
-        item = BudgetItem.objects.create(category=self.category, amount_in_budget=70000)
+        item = BudgetItem.objects.create(category=category, amount_in_budget=70000)
         budget = Budget.objects.create(month=timezone.now, user=self.user)
         budget.items.add(item)
         budget.save()

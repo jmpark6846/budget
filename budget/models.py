@@ -18,6 +18,13 @@ class BudgetItem(models.Model):
     category = models.ForeignKey(BudgetCategory, related_name='budget_items', on_delete=models.CASCADE, verbose_name='예산 카테고리')
     amount_in_budget = models.IntegerField('금액')
 
+    def save(self, *args, **kwargs):
+        # 예산 항목 생성 시 금액을 설정하지 않으면 카테고리의 금액을 기본값으로 입력
+        if not self.amount_in_budget:
+            self.amount_in_budget = self.category.amount
+
+        super(BudgetItem, self).save(*args, **kwargs)
+
     def __str__(self):
         return '{} : {}'.format(self.category.name, self.amount_in_budget)
 
