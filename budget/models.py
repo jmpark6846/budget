@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-# Create your models here.
 class BudgetCategory(models.Model):
     name = models.CharField('예산', max_length=255)
     amount = models.IntegerField('금액')
@@ -19,6 +18,7 @@ class BudgetItem(models.Model):
 
     def __str__(self):
         return '{} : {}'.format(self.category.name, self.amount_in_budget)
+
 
 class Budget(models.Model):
     month = models.DateField('월')
