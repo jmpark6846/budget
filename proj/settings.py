@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'budget',
     'user',
     'account',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [

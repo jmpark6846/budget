@@ -1,43 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load humanize %}
+
 <div id="budget-list-page">
-    <h4>예산 잡을 금액: {{ need_budgeted }}</h4>
-    <div>{% now "F" %} 자금: {{ funds }}</div>
-    <div>지금까지 예산: {{ budgeted }}</div>
-    <div class="control-row mb-2">
-        <a href="{% url 'budget:create' %}" class="btn btn-success">생성</a>
+    <div class="budget-status mb-3">
+        <h2>{{ need_budgeted|intcomma }}원</h2>
+        <div >예산 잡을 금액</div>
+        <div>{% now "F" %} 자금: {{ funds|intcomma }}원</div>
+        <div>지금까지 예산: {{ budgeted|intcomma }}원</div>
     </div>
 
     <div class="budget-list-section">
-        <div class="row budget-row border-bottom border-top">
-            <div class="col-8 mt-2 mb-2 text-center">
-                예산 항목
-            </div>
-
-            <div class="col-2 text-center">
-                금액
-            </div>
-            <div class="col-2 text-center">
-                비고
-            </div>
-        </div>
-
         {% for budget in budgets %}
-        <div class="row budget-row border-bottom">
+        <div class="budget-row">
             <a href="{% url 'budget:update' budget.pk %}">
-                <div class="col-8 mt-2 mb-2">
-                    {{budget.name}}
-                </div>
+                {{budget.name}} : {{budget.amount|intcomma}}원
             </a>
-            <div class="col-2 text-right">
-                {{budget.amount}}원
-            </div>
-            <div class="col-2 text-center">
-
-            </div>
         </div>
         {% endfor %}
-    </div>
 
+    </div>
+    <div class="control-row align-right my-2">
+        <a href="{% url 'budget:create' %}" class="btn btn-success">생성</a>
+    </div>
 </div>
 {% endblock %}

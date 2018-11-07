@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load humanize %}
+
 <div class="account-list-page">
     <div class="control-row mb-2">
         <a href="{% url 'account:create' %}" class="btn btn-success">생성</a>
@@ -10,7 +12,7 @@
             <div class="card my-4">
                 <div class="card-body ">
                     <h4>{{account.name}}</h4>
-                    <div>{{account.amount}}</div>
+                    <div>{{account.amount|intcomma}}원</div>
                 </div>
             </div>
         </a>

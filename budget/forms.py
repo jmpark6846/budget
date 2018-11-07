@@ -1,9 +1,9 @@
 from django import forms
-from .models import Budget
+from .models import BudgetCategory
 
 class BudgetForm(forms.ModelForm):
     class Meta:
-        model = Budget
+        model = BudgetCategory
         fields = ['name', 'amount']
         widgets = {
             'name': forms.TextInput(attrs={
