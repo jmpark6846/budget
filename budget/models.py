@@ -21,10 +21,13 @@ class BudgetItem(models.Model):
 
 
 class Budget(models.Model):
-    month = models.DateField('월')
+    year = models.IntegerField('년')
+    month = models.IntegerField('월')
+
     items = models.ManyToManyField(BudgetItem, related_name= 'budgets')
     user = models.ForeignKey(User, related_name='budgets',on_delete=models.CASCADE, verbose_name='사용자')
 
+
     def __str__(self):
-        return self.month
+        return '{}월'.format(self.month)
 

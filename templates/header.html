@@ -1,7 +1,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a href="{% url 'budget:list' %}" class='navbar-brand'>budget✍️</a>
+            <a href="{% url 'index' %}" class='navbar-brand'>budget✍️</a>
 
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
@@ -10,7 +10,7 @@
                         <a class='nav-link' href='{% url "account:list"  %}'>계정</a>
                     </li>
                     <li class="nav-item">
-                        <a class='nav-link' href='{% url "budget:list"  %}'>예산</a>
+                        <a class='nav-link' href='{% url "budget:detail"  %}'>예산</a>
                     </li>
                     <li class="nav-item">
                         <a class='nav-link' href='{% url "user:logout"  %}'>로그아웃</a>

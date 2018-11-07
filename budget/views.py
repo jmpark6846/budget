@@ -11,10 +11,11 @@ from functools import reduce
 
 
 @login_required
-def budget_detail(request, year=timezone.now().year, month=timezone.now().month):
-    budget = Budget.objects.get_or_create(year=year, month=month, user=request.user)
-
-    context={ 'budget':budget }
+def budget_detail(request):
+    year = request.GET.get('year', timezone.now().year)
+    month = request.GET.get('month', timezone.now().month)
+    budget, created = Budget.objects.get_or_create(year=year, month=month, user=request.user)
+    context={ 'budget': budget }
 
     # accounts = Account.objects.filter(user=request.user)
     # funds = reduce(lambda sum, acc: sum+acc.amount, accounts, 0)

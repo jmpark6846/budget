@@ -44,6 +44,8 @@ class BudgetViewTestCase(TestCase):
     def view_can_show_a_budget_detail(self):
         res = self.client.get(reverse('budget:detail', kwargs={'pk':self.budget.pk}))
         self.assertEqual(res.status_code, 200)
+
+
 #
 #
 # class BudgetCategoryViewTestCase(TestCase):
