@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
+from  functools import reduce
+
 
 class BudgetCategory(models.Model):
     name = models.CharField('예산', max_length=255)
@@ -27,6 +29,8 @@ class Budget(models.Model):
     items = models.ManyToManyField(BudgetItem, related_name= 'budgets')
     user = models.ForeignKey(User, related_name='budgets',on_delete=models.CASCADE, verbose_name='사용자')
 
+    def budgeted(self):
+        return reduce(lambda sum, item: sum + item.amount_in_budget, self.items.all(), 0)
 
     def __str__(self):
         return '{}월'.format(self.month)

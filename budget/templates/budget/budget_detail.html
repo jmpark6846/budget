@@ -7,7 +7,7 @@
         <h2>{{ need_budgeted|intcomma }}원</h2>
         <div >예산 잡을 금액</div>
         <div>{{ budget.month }}월 자금: {{ funds|intcomma }}원</div>
-        <div>지금까지 예산: {{ budgeted|intcomma }}원</div>
+        <div>지금까지 예산: {{ budget.budgeted |intcomma }}원</div>
     </div>
 
     <div class="category-list-section">
