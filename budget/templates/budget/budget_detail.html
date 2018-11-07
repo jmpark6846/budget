@@ -2,7 +2,7 @@
 {% block content %}
 {% load humanize %}
 
-<div id="budget-list-page">
+<div id="budget-detail-page">
     <div class="budget-status mb-3">
         <h2>{{ need_budgeted|intcomma }}원</h2>
         <div >예산 잡을 금액</div>
@@ -10,11 +10,11 @@
         <div>지금까지 예산: {{ budgeted|intcomma }}원</div>
     </div>
 
-    <div class="budget-list-section">
-        {% for budget in budgets %}
+    <div class="category-list-section">
+        {% for category in budget.categories %}
         <div class="budget-row">
             <a href="{% url 'budget:update' budget.pk %}">
-                {{budget.name}} : {{budget.amount|intcomma}}원
+                {{category.name}} : {{category.amount|intcomma}}원
             </a>
         </div>
         {% endfor %}

@@ -1,7 +1,8 @@
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.test import TestCase
-from .models import BudgetCategory
+from .models import BudgetCategory, Budget, BudgetItem
 
 # Create your tests here.
 class BudgetCategoryModelTestCase(TestCase):
@@ -21,6 +22,7 @@ class BudgetCategoryModelTestCase(TestCase):
         new_count = BudgetCategory.objects.count()
         self.assertNotEqual(old_count, new_count)
 
+
 class BudgetViewTestCase(TestCase):
     def create_user(self, name, pw):
         user = User.objects.create(username=name)
@@ -31,8 +33,17 @@ class BudgetViewTestCase(TestCase):
     def setUp(self):
         self.user = self.create_user('tom', '12345')
         self.client.login(username='tom', password='12345')
+        category = BudgetCategory.objects.create(name='교통비', amount=55000, user=self.user)
+        item = BudgetItem.objects.create(category=self.category, amount_in_budget=70000)
+        budget = Budget.objects.create(month=timezone.now, user=self.user)
+        budget.items.add(item)
+        budget.save()
+        self.budget=budget
 
 
+    def view_can_show_a_budget_detail(self):
+        res = self.client.get(reverse('budget:detail', kwargs={'pk':self.budget.pk}))
+        self.assertEqual(res.status_code, 200)
 #
 #
 # class BudgetCategoryViewTestCase(TestCase):

@@ -19,7 +19,7 @@ from budget import views as budget_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', budget_views.budget_list, name='index'),
+    path('', budget_views.budget_detail, name='index'),
     path('user/', include('user.urls')),
     path('budget/', include('budget.urls')),
     path('account/', include('account.urls')),

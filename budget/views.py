@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.views import generic
+from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from account.models import Account
@@ -8,20 +9,24 @@ from .models import Budget
 from .forms import BudgetForm
 from functools import reduce
 
-@login_required
-def budget_list(request):
-    budgets = Budget.objects.filter(user=request.user).order_by('-created')
-    accounts = Account.objects.filter(user=request.user)
-    funds = reduce(lambda sum, acc: sum+acc.amount, accounts, 0)
-    budgeted = reduce(lambda sum, bdg: sum+bdg.amount, budgets, 0)
 
-    context = {
-        'budgets': budgets,
-        'funds': funds,
-        'budgeted': budgeted,
-        'need_budgeted': funds - budgeted
-    }
-    return render(request, 'budget/budget_list.html', context)
+@login_required
+def budget_detail(request, year=timezone.now().year, month=timezone.now().month):
+    budget = Budget.objects.get_or_create(year=year, month=month, user=request.user)
+
+    context={ 'budget':budget }
+
+    # accounts = Account.objects.filter(user=request.user)
+    # funds = reduce(lambda sum, acc: sum+acc.amount, accounts, 0)
+    # budgeted = reduce(lambda sum, bdg: sum+bdg.amount, budget, 0)
+    #
+    # context = {
+    #     'budgets': budgets,
+    #     'funds': funds,
+    #     'budgeted': budgeted,
+    #     'need_budgeted': funds - budgeted
+    # }
+    return render(request, 'budget/budget_detail.html', context)
 
 
 @login_required
