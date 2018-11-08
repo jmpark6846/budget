@@ -24,7 +24,7 @@ def budget_detail(request):
     context = {
         'budget': budget,
         'funds': funds,
-        'need_budgeted': funds - budget.budgeted()
+        'need_budgeted': funds - budget.budgeted_sum()
     }
 
     return render(request, 'budget/budget_detail.html', context)
@@ -52,23 +52,22 @@ def budget_category_create(request):
         form = BudgetCategoryForm()
         context = { 'form': form }
         return render(request, 'budget/budget_category_form.html', context)
-#
-#
-#
-# class BudgetUpdateView(LoginRequiredMixin, generic.UpdateView):
-#     model = Budget
-#     form_class = BudgetForm
-#     context_object_name = 'budget'
-#     template_name = 'budget/budget_form.html'
-#
-#     def get_queryset(self):
-#         queryset = super(BudgetUpdateView, self).get_queryset()
-#         return queryset.filter(user=self.request.user)
-#
-#     def get_success_url(self):
-#         return reverse('budget:list')
-#
-#
+
+
+class BudgetCategoryUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = BudgetCategory
+    form_class = BudgetCategoryForm
+    context_object_name = 'budget'
+    template_name = 'budget/budget_category_form.html'
+
+    def get_queryset(self):
+        queryset = super(BudgetCategoryUpdateView, self).get_queryset()
+        return queryset.filter(user=self.request.user)
+
+    def get_success_url(self):
+        return reverse('budget:detail')
+
+
 # class BudgetDeleteView(LoginRequiredMixin, generic.DeleteView):
 #     model = Budget
 #     success_url = reverse_lazy('budget:list')

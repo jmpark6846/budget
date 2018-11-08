@@ -7,14 +7,14 @@
         <h2>{{ need_budgeted|intcomma }}원</h2>
         <div >예산 잡을 금액</div>
         <div>{{ budget.month }}월 자금: {{ funds|intcomma }}원</div>
-        <div>지금까지 예산: {{ budget.budgeted |intcomma }}원</div>
-        <div>사용한 예산: {{ budget.spent_sum |intcomma }}원</div>
+        <div>지금까지 예산: {{ budget.budgeted_sum |intcomma }}원</div>
+        <div>사용한 예산: {{ budget.activity_sum |intcomma }}원</div>
     </div>
 
     <div class="category-list-section">
         {% for item in budget.items.all %}
         <div class="budget-row">
-            {{item.category.name}} : {{item.category.amount|intcomma}}원 / {{item.spent}}원
+            <a href="{% url 'budget:category_update' item.category.pk %}">{{item.category.name}}</a> : {{item.budgeted|intcomma}}원 / {{item.activity|intcomma}}원
         </div>
         {% endfor %}
 
