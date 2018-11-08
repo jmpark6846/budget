@@ -97,8 +97,8 @@ class BudgetCategoryViewTestCase(TestCase):
         res = self.client.post(reverse('budget:category_update', kwargs={'pk': self.budget_category.pk}), budget_category_data)
         self.assertEqual(res.status_code, 302)
 
-#     def test_view_can_delete_budget_category(self):
-#         old_count = BudgetCategory.objects.count()
-#         self.client.delete(reverse('budget:category_delete', kwargs={'pk': self.budget_category.pk}))
-#         new_count = BudgetCategory.objects.count()
-#         self.assertNotEqual(old_count, new_count)
+    def test_view_can_delete_budget_category(self):
+        old_count = BudgetCategory.objects.count()
+        self.client.delete(reverse('budget:category_delete', kwargs={'pk': self.budget_category.pk}))
+        new_count = BudgetCategory.objects.count()
+        self.assertNotEqual(old_count, new_count)

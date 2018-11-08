@@ -68,10 +68,10 @@ class BudgetCategoryUpdateView(LoginRequiredMixin, generic.UpdateView):
         return reverse('budget:detail')
 
 
-# class BudgetDeleteView(LoginRequiredMixin, generic.DeleteView):
-#     model = Budget
-#     success_url = reverse_lazy('budget:list')
-#
-#     def get_queryset(self):
-#         queryset = super(BudgetDeleteView, self).get_queryset()
-#         return queryset.filter(user=self.request.user)
+class BudgetCategoryDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = BudgetCategory
+    success_url = reverse_lazy('budget:detail')
+
+    def get_queryset(self):
+        queryset = super(BudgetCategoryDeleteView, self).get_queryset()
+        return queryset.filter(user=self.request.user)
