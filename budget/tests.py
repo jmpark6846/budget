@@ -40,8 +40,8 @@ class BudgetModelTestCase(TestCase):
 
         category1 = BudgetCategory.objects.create(name='교통', amount=1000, user=self.user)
         category2 = BudgetCategory.objects.create(name='생활', amount=7000, user=self.user)
-        item1=BudgetItem.objects.create(category=category1)
-        item2=BudgetItem.objects.create(category=category2)
+        item1=BudgetItem.objects.create(category=category1, spent=500)
+        item2=BudgetItem.objects.create(category=category2, spent=100)
 
         budget.items.add(item1)
         budget.items.add(item2)
@@ -59,7 +59,7 @@ class BudgetViewTestCase(TestCase):
         self.user = self.create_user('tom', '12345')
         self.client.login(username='tom', password='12345')
         category = BudgetCategory.objects.create(name='교통비', amount=55000, user=self.user)
-        item = BudgetItem.objects.create(category=category, amount_in_budget=70000)
+        item = BudgetItem.objects.create(category=category, spent=70000)
         budget = Budget.objects.create(month=timezone.now, user=self.user)
         budget.items.add(item)
         budget.save()
