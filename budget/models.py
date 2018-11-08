@@ -17,33 +17,31 @@ class BudgetCategory(models.Model):
         return self.name
 
 
-class BudgetItem(models.Model):
-    '''
-    예산 항목. 예산 카테고리와 해당 예산으로 특정 월에 사용한 금액(spent)을 갖고 있다.
-    '''
-    category = models.ForeignKey(BudgetCategory, related_name='budget_items', on_delete=models.CASCADE, verbose_name='예산 카테고리')
-    spent = models.IntegerField('금액')
-
-    def save(self, *args, **kwargs):
-        # 예산 항목 생성 시 금액을 설정하지 않으면 카테고리의 금액을 기본값으로 입력
-        if not self.spent:
-            self.spent = self.category.amount
-
-        super(BudgetItem, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return '{} : {}'.format(self.category.name, self.spent)
-
-
 class Budget(models.Model):
     '''
-    한 달치 예산. 년/월 정보와 예산 항목(items)을 갖고 있다.
+    한 달치 예산. 년/월 정보 가진다.
     '''
     year = models.IntegerField('년')
     month = models.IntegerField('월')
-
-    items = models.ManyToManyField(BudgetItem, related_name= 'budgets')
     user = models.ForeignKey(User, related_name='budgets',on_delete=models.CASCADE, verbose_name='사용자')
+
+    def save(self, *args, **kwargs):
+        created = False
+        if not self.pk:
+            created=True
+
+        super(Budget, self).save(*args, **kwargs)
+
+        if created:
+            # 예산 생성 시 카테고리 전부 들고오기 -> 항목 생성 -> 예산에 추가
+            categories = BudgetCategory.objects.filter(user=self.user)
+
+            for c in categories:
+                item = BudgetItem.objects.create(category=c, budget=self)
+                self.items.add(item)
+
+            self.save()
+
 
     def budgeted(self):
         # 예산 잡힌 금액들. 한 달치 예산 항목들을 모두 더해 반환한다.
@@ -54,4 +52,16 @@ class Budget(models.Model):
 
     def __str__(self):
         return '{}월'.format(self.month)
+
+
+class BudgetItem(models.Model):
+    '''
+    예산 항목. 예산 카테고리와 해당 예산으로 특정 월에 사용한 금액(spent)을 갖고 있다.
+    '''
+    category = models.ForeignKey(BudgetCategory, related_name='budget_items', on_delete=models.CASCADE, verbose_name='예산 카테고리')
+    spent = models.IntegerField('금액', default=0)
+    budget = models.ForeignKey(Budget, related_name='items', on_delete=models.CASCADE, verbose_name='예산')
+
+    def __str__(self):
+        return '{} : {}'.format(self.category.name, self.spent)
 

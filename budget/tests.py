@@ -34,19 +34,16 @@ class BudgetModelTestCase(TestCase):
     def setUp(self):
         self.user = create_user('tom', '12345')
         self.client.login(username='tom', password='12345')
+        BudgetCategory.objects.create(name='교통', amount=1000, user=self.user)
+        BudgetCategory.objects.create(name='생활', amount=7000, user=self.user)
+        self.budget = Budget.objects.create(year=2018, month=9, user=self.user)
 
-    def test_model_can_get_budgted(self):
-        budget = Budget.objects.create(year=2018, month=9, user=self.user)
+    def test_model_can_get_budgeted(self):
+        self.assertEqual(self.budget.budgeted(), 8000)
 
-        category1 = BudgetCategory.objects.create(name='교통', amount=1000, user=self.user)
-        category2 = BudgetCategory.objects.create(name='생활', amount=7000, user=self.user)
-        item1=BudgetItem.objects.create(category=category1, spent=500)
-        item2=BudgetItem.objects.create(category=category2, spent=100)
+    def test_can_add_items_when_create_budget(self):
+        self.assertEqual(self.budget.items.count(), 2)
 
-        budget.items.add(item1)
-        budget.items.add(item2)
-
-        self.assertEqual(budget.budgeted(), 8000)
 
 class BudgetViewTestCase(TestCase):
     def create_user(self, name, pw):
