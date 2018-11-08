@@ -14,15 +14,13 @@
     <div class="category-list-section">
         {% for item in budget.items.all %}
         <div class="budget-row">
-
             {{item.category.name}} : {{item.category.amount|intcomma}}원 / {{item.spent}}원
-
         </div>
         {% endfor %}
 
     </div>
     <div class="control-row align-right my-2">
-        <a href="" class="btn btn-success">생성</a>
+        <a href="{% url 'budget:category_create' %}" class="btn btn-success">생성</a>
     </div>
 </div>
 {% endblock %}

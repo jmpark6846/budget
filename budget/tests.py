@@ -57,7 +57,7 @@ class BudgetViewTestCase(TestCase):
         self.client.login(username='tom', password='12345')
         category = BudgetCategory.objects.create(name='교통비', amount=55000, user=self.user)
         item = BudgetItem.objects.create(category=category, spent=70000)
-        budget = Budget.objects.create(month=timezone.now, user=self.user)
+        budget = Budget.objects.create(user=self.user)
         budget.items.add(item)
         budget.save()
         self.budget=budget
@@ -66,8 +66,6 @@ class BudgetViewTestCase(TestCase):
     def view_can_show_a_budget_detail(self):
         res = self.client.get(reverse('budget:detail', kwargs={'pk':self.budget.pk}))
         self.assertEqual(res.status_code, 200)
-
-
 
 
 class BudgetCategoryViewTestCase(TestCase):
@@ -81,26 +79,24 @@ class BudgetCategoryViewTestCase(TestCase):
         self.user = self.create_user('tom', '12345')
         self.client.login(username='tom', password='12345')
         self.budget_category = BudgetCategory.objects.create(name="test budget_category", amount=1000, user=self.user)
+        self.budget = Budget.objects.create(user=self.user)
 
-#     def test_view_can_list_budget_categorys(self):
-#         for i in range(0,5):
-#             BudgetCategory.objects.create(name="test budget_category name #{}".format(i), amount=i, user=self.user)
+    def test_view_can_create_budget_category(self):
+        budget_category_data = { 'name': '교통', 'amount': 1000, 'user': self.user}
+        session = self.client.session
+        session['budget_pk'] = self.budget.pk
+        session.save()
+
+        res = self.client.post(reverse('budget:category_create'), budget_category_data)
+        self.assertEqual(res.status_code, 302)  # 생성 성공시 리다이렉트
 #
-#         res = self.client.get(reverse('budget_category:list'))
-#         self.assertEqual(res.status_code, 200)
-# #
-#     def test_view_can_create_budget_category(self):
-#         budget_category_data = { 'name': '교통', 'amount': 1000, 'user': self.user}
-#         res = self.client.post(reverse('budget:category_create'), budget_category_data)
-#         self.assertEqual(res.status_code, 302)  # 생성 성공시 리다이렉트
-# #
 #     def test_view_can_update_budget_category(self):
 #         budget_category_data = {'name': '교통', 'amount': 1000, 'user': self.user}
-#         res = self.client.post(reverse('budget_category:update', kwargs={'pk': self.budget_category.pk}), budget_category_data)
+#         res = self.client.post(reverse('budget:category_update', kwargs={'pk': self.budget_category.pk}), budget_category_data)
 #         self.assertEqual(res.status_code, 302)
 #
 #     def test_view_can_delete_budget_category(self):
 #         old_count = BudgetCategory.objects.count()
-#         self.client.delete(reverse('budget_category:delete', kwargs={'pk': self.budget_category.pk}))
+#         self.client.delete(reverse('budget:category_delete', kwargs={'pk': self.budget_category.pk}))
 #         new_count = BudgetCategory.objects.count()
 #         self.assertNotEqual(old_count, new_count)

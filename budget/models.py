@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+from django.utils import timezone
+
 from django.db import models
 from  functools import reduce
 
@@ -21,8 +23,8 @@ class Budget(models.Model):
     '''
     한 달치 예산. 년/월 정보 가진다.
     '''
-    year = models.IntegerField('년')
-    month = models.IntegerField('월')
+    year = models.IntegerField('년', default=timezone.now().year)
+    month = models.IntegerField('월', default=timezone.now().month)
     user = models.ForeignKey(User, related_name='budgets',on_delete=models.CASCADE, verbose_name='사용자')
 
     def save(self, *args, **kwargs):

@@ -1,7 +1,8 @@
 from django import forms
 from .models import BudgetCategory
 
-class BudgetForm(forms.ModelForm):
+class BudgetCategoryForm(forms.ModelForm):
+
     class Meta:
         model = BudgetCategory
         fields = ['name', 'amount']
