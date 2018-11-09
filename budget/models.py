@@ -22,8 +22,7 @@ class Budget(models.Model):
     '''
     한 달치 예산. 년/월 정보 가진다.
     '''
-    year = models.IntegerField('년', default=timezone.now().year)
-    month = models.IntegerField('월', default=timezone.now().month)
+    year_month = models.DateField('언제', default=timezone.now, unique_for_month=True)
     user = models.ForeignKey(User, related_name='budgets',on_delete=models.CASCADE, verbose_name='사용자')
 
     def save(self, *args, **kwargs):
@@ -52,7 +51,7 @@ class Budget(models.Model):
         return reduce(lambda sum, item: sum + item.activity, self.items.all(), 0)
 
     def __str__(self):
-        return '{}월'.format(self.month)
+        return '{}월'.format(self.year_month)
 
 
 class BudgetItem(models.Model):

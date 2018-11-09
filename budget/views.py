@@ -7,14 +7,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from account.models import Account
 from functools import reduce
-
+from datetime import datetime
 from .models import Budget, BudgetCategory, BudgetItem
 from .forms import BudgetCategoryForm
 
 
 @login_required
 def budget_detail(request, year=timezone.now().year, month=timezone.now().month):
-    budget, created = Budget.objects.get_or_create(year=year, month=month, user=request.user)
+    year_month = datetime.strptime('{}{}'.format(year,month), '%Y%m')
+    budget, created = Budget.objects.get_or_create(year_month=year_month, user=request.user)
+    # budget, created = Budget.objects.get_or_create(year=year, month=month, user=request.user)
     request.session['budget_pk']=budget.pk
     accounts = Account.objects.filter(user=request.user)
     funds = reduce(lambda sum, acc: sum+acc.amount, accounts, 0)
@@ -42,7 +44,7 @@ def budget_category_create(request):
 
             budget = get_object_or_404(Budget, pk=request.session['budget_pk'])
             BudgetItem.objects.create(category=c, budget=budget)
-            return redirect(reverse('budget:detail'))
+            return redirect(reverse('budget:index'))
         else:
             context = { 'form': form }
             return render(request, 'budget/budget_category_form.html', context)
@@ -63,12 +65,12 @@ class BudgetCategoryUpdateView(LoginRequiredMixin, generic.UpdateView):
         return queryset.filter(user=self.request.user)
 
     def get_success_url(self):
-        return reverse('budget:detail')
+        return reverse('budget:index')
 
 
 class BudgetCategoryDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = BudgetCategory
-    success_url = reverse_lazy('budget:detail')
+    success_url = reverse_lazy('budget:index')
 
     def get_queryset(self):
         queryset = super(BudgetCategoryDeleteView, self).get_queryset()

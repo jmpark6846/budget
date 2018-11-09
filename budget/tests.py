@@ -1,4 +1,5 @@
 from django.utils import timezone
+from datetime import datetime
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.test import TestCase
@@ -36,7 +37,8 @@ class BudgetModelTestCase(TestCase):
         self.client.login(username='tom', password='12345')
         BudgetCategory.objects.create(name='교통', user=self.user)
         BudgetCategory.objects.create(name='생활', user=self.user)
-        self.budget = Budget.objects.create(year=2018, month=9, user=self.user)
+        year_month = datetime.strptime('201809', '%Y%m')
+        self.budget = Budget.objects.create(year_month=year_month, user=self.user)
 
     def test_model_can_get_budgeted_sum(self):
         self.assertEqual(self.budget.budgeted_sum(), 0)
