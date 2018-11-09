@@ -19,3 +19,10 @@ a:hover{
     display: flex;
     align-items: center;
 }
+
+.budget-status{
+}
+.control-row.align-right{
+    display: flex;
+    justify-content: flex-end;
+}

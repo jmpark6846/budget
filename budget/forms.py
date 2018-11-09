@@ -1,19 +1,15 @@
 from django import forms
-from .models import Budget
+from .models import BudgetCategory
 
-class BudgetForm(forms.ModelForm):
+class BudgetCategoryForm(forms.ModelForm):
+
     class Meta:
-        model = Budget
-        fields = ['name', 'amount']
+        model = BudgetCategory
+        fields = ['name']
         widgets = {
             'name': forms.TextInput(attrs={
                 'autocomplete': 'off',
                 'placeholder': '예산 항목',
                 'class': 'form-control',
             }),
-            'amount': forms.NumberInput(attrs={
-                'autocomplete': 'off',
-                'placeholder': '금액',
-                'class': 'form-control',
-            })
         }
