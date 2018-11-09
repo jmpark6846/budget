@@ -11,12 +11,13 @@ from datetime import datetime
 from .models import Budget, BudgetCategory, BudgetItem
 from .forms import BudgetCategoryForm
 
+now = timezone.now()
 
 @login_required
-def budget_detail(request, year=timezone.now().year, month=timezone.now().month):
+def budget_detail(request, year=now.year, month=now.month):
     year_month = datetime.strptime('{}{}'.format(year,month), '%Y%m')
     budget, created = Budget.objects.get_or_create(year_month=year_month, user=request.user)
-    # budget, created = Budget.objects.get_or_create(year=year, month=month, user=request.user)
+
     request.session['budget_pk']=budget.pk
     accounts = Account.objects.filter(user=request.user)
     funds = reduce(lambda sum, acc: sum+acc.amount, accounts, 0)
