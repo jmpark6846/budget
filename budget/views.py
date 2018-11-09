@@ -13,9 +13,7 @@ from .forms import BudgetCategoryForm
 
 
 @login_required
-def budget_detail(request):
-    year = request.GET.get('year', timezone.now().year)
-    month = request.GET.get('month', timezone.now().month)
+def budget_detail(request, year=timezone.now().year, month=timezone.now().month):
     budget, created = Budget.objects.get_or_create(year=year, month=month, user=request.user)
     request.session['budget_pk']=budget.pk
     accounts = Account.objects.filter(user=request.user)

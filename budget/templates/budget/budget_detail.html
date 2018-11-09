@@ -3,6 +3,11 @@
 {% load humanize %}
 
 <div id="budget-detail-page">
+
+    {{budget.year}}년 {{ budget.month }}월
+
+    <a href="{% url 'budget:detail' year=budget.year month=budget.month|add:1%}">다음 </a>
+    <!--{% now 'Y월 F' %}-->
     <div class="budget-status mb-3">
         <h2>{{ need_budgeted|intcomma }}원</h2>
         <div >예산 잡을 금액</div>
