@@ -25,7 +25,7 @@ SECRET_KEY = '99b%4__3l152t3m+5)8wa&kxq82x80zn9)$rr1o(d%8-ni%z*r'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['http://budget.2nfjvnb9vu.ap-northeast-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['budget.2nfjvnb9vu.ap-northeast-2.elasticbeanstalk.com']
 
 
 # Application definition
