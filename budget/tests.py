@@ -1,4 +1,5 @@
 from django.utils import timezone
+from datetime import datetime
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.test import TestCase
@@ -36,7 +37,8 @@ class BudgetModelTestCase(TestCase):
         self.client.login(username='tom', password='12345')
         BudgetCategory.objects.create(name='교통', user=self.user)
         BudgetCategory.objects.create(name='생활', user=self.user)
-        self.budget = Budget.objects.create(year=2018, month=9, user=self.user)
+        year_month = datetime.strptime('201809', '%Y%m')
+        self.budget = Budget.objects.create(year_month=year_month, user=self.user)
 
     def test_model_can_get_budgeted_sum(self):
         self.assertEqual(self.budget.budgeted_sum(), 0)
@@ -66,9 +68,13 @@ class BudgetViewTestCase(TestCase):
         self.budget=Budget.objects.create(user=self.user)
 
 
-    def view_can_show_a_budget_detail(self):
-        res = self.client.get(reverse('budget:detail', kwargs={'pk':self.budget.pk}))
+    def view_can_show_a_budget_this_month(self):
+        res = self.client.get(reverse('budget:index'))
         self.assertEqual(res.status_code, 200)
+
+    def can_show_a_budget_other_month(self):
+        res = self.client.get(reverse('budget:detail', kwargs={ 'year': 2018, 'month': 5 }))
+        self.assertEqual(res.context['budget'].year_month.month, 5)
 
 
 class BudgetCategoryViewTestCase(TestCase):
@@ -90,6 +96,7 @@ class BudgetCategoryViewTestCase(TestCase):
     def test_view_can_create_budget_category(self):
         budget_category_data = { 'name': '교통', 'user': self.user}
         res = self.client.post(reverse('budget:category_create'), budget_category_data)
+        self.assertEqual(res.status_code['budget'].year_month)
         self.assertEqual(res.status_code, 302)  # 생성 성공시 리다이렉트
 
     def test_view_can_update_budget_category(self):

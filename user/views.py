@@ -16,7 +16,7 @@ def signup(request):
     if form.is_valid():
       user = form.save()
       login(request, user)
-      return redirect(reverse('budget:detail'))
+      return redirect(reverse('budget:index'))
     else:
       return render(request, 'user/signup.html', { 'form': form })
   else:

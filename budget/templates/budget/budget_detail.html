@@ -3,11 +3,9 @@
 {% load humanize %}
 
 <div id="budget-detail-page">
-
-    {{budget.year}}년 {{ budget.month }}월
-
-    <a href="{% url 'budget:detail' year=budget.year month=budget.month|add:1%}">다음 </a>
-    <!--{% now 'Y월 F' %}-->
+    <a href="{% url 'budget:detail' year=budget.year_month.year month=budget.year_month.month|add:-1 %}">지난달</a>
+    {{ budget.year_month|date:'Y년 M' }}
+    <a href="{% url 'budget:detail' year=budget.year_month.year month=budget.year_month.month|add:1 %}">다음달</a>
     <div class="budget-status mb-3">
         <h2>{{ need_budgeted|intcomma }}원</h2>
         <div >예산 잡을 금액</div>
@@ -25,7 +23,7 @@
 
     </div>
     <div class="control-row align-right my-2">
-        <a href="{% url 'budget:category_create' %}" class="btn btn-success">생성</a>
+        <a href="{% url 'budget:category_create' year=budget.year_month.year month=budget.year_month.month %}" class="btn btn-success">생성</a>
     </div>
 </div>
 {% endblock %}
