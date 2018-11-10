@@ -6,6 +6,10 @@ ALLOWED_HOSTS = [
     'budget.2nfjvnb9vu.ap-northeast-2.elasticbeanstalk.com'
 ]
 
+print('RDS_HOSTNAME' in os.environ)
+print(os.environ)
+
+
 if 'RDS_HOSTNAME' in os.environ:
     DATABASES = {
         'default': {
