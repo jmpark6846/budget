@@ -1,0 +1,28 @@
+a{
+    color: rgba(0,0,0,.7);
+}
+a:hover{
+    color: rgba(0,0,0, .9);
+    text-decoration: none!important;
+}
+
+
+.dropdown{
+    display: inline-block;
+}
+
+
+.budget-list-section a{
+    display: contents;
+}
+.budget-row{
+    display: flex;
+    align-items: center;
+}
+
+.budget-status{
+}
+.control-row.align-right{
+    display: flex;
+    justify-content: flex-end;
+}
