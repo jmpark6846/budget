@@ -11,7 +11,7 @@ if 'RDS_HOSTNAME' in os.environ:
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'OPTIONS':{
-                'read_default_file':'.config/my.cnf'
+                'read_default_file': os.path.join(BASE_DIR,'.config/my.cnf')
             }
         }
     }
