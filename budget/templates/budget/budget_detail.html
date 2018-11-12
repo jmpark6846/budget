@@ -41,8 +41,21 @@
         {% for category, item in category_budget_list %}
         <div class="row py-1">
             <div class="col-md-4"><a href="{% url 'budget:category_update' category.pk %}">{{category.name}}</a></div>
-            <div class="col-md-4 text-right"><a href="{% url 'budget:item_update' pk=item.pk %}">{{item.budgeted|intcomma}}원</a></div>
-            <div class="col-md-4 text-right"><a href="">{{item.activity|intcomma}}원</a></div>
+            {% if item %}
+            <div class="col-md-4 text-right">
+                <a href="{% url 'budget:item_update' item.pk %}">{{item.budgeted|default:0|intcomma}}원</a>
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="">{{item.activity|default:0|intcomma}}원</a>
+            </div>
+            {% else %}
+            <div class="col-md-4 text-right">
+                <a href="{% url 'budget:item_create' budget.year_month|date:'Ym' category.pk %}">0원</a>
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="">0원</a>
+            </div>
+            {% endif %}
         </div>
         {% endfor %}
 

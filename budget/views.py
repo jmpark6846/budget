@@ -36,10 +36,8 @@ def budget_detail(request, year=now.year, month=now.month):
     for c in request.user.categories.order_by('-created'):
         filtered = c.budget_items.filter(budget=budget)
 
-        if not filtered.count():
-            continue
+        i = filtered[0] if filtered.count() else None
 
-        i = filtered[0]
         category_budget_list.append((c, i))
 
     context = {
@@ -78,6 +76,25 @@ def budget_category_create(request, year, month):
         form = BudgetCategoryForm()
         context = { 'form': form }
         return render(request, 'budget/budget_category_form.html', context)
+
+
+
+@login_required
+def budget_items_create(request, year_month, category_pk):
+    _year_month = datetime.datetime.strptime(year_month, '%Y%m')
+    if request.method == 'POST':
+        form = BudgetItemForm(request.POST)
+        if form.is_valid():
+            budget = get_object_or_404(Budget, year_month=_year_month, user=request.user)
+            category = get_object_or_404(BudgetCategory, pk=category_pk, user=request.user)
+            item = BudgetItem(budget=budget, category=category, budgeted=form.cleaned_data['budgeted'])
+            item.save()
+            return redirect(reverse('budget:detail', kwargs={'year':_year_month.year, 'month':_year_month.month}))
+        else:
+            return render(request, 'budget/budget_item_form.html', {'form': form})
+    else:
+        form = BudgetItemForm()
+        return render(request, 'budget/budget_item_form.html', {'form':form})
 
 
 class BudgetCategoryUpdateView(LoginRequiredMixin, generic.UpdateView):
