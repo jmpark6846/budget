@@ -45,13 +45,13 @@ class Budget(models.Model):
 
     def budgeted_sum(self):
         # 예산 잡힌 금액들. 한 달치 예산 항목들을 모두 더해 반환한다.
-        return reduce(lambda sum, item: sum + item.budgeted, self.items.all(), 0)
+        return reduce(lambda sum, item: sum + item.budgeted if item.budgeted else 0, self.items.all(), 0)
 
     def activity_sum(self):
-        return reduce(lambda sum, item: sum + item.activity, self.items.all(), 0)
+        return reduce(lambda sum, item: sum + item.activity if item.activity else 0, self.items.all(), 0)
 
     def __str__(self):
-        return '{}월'.format(self.year_month)
+        return '{}의 {}월'.format(self.user, self.year_month)
 
 
 class BudgetItem(models.Model):
@@ -59,10 +59,10 @@ class BudgetItem(models.Model):
     예산 항목.
     '''
     category = models.ForeignKey(BudgetCategory, related_name='budget_items', on_delete=models.CASCADE, verbose_name='예산 카테고리')
-    budgeted = models.IntegerField('예산 금액', default=0)
-    activity = models.IntegerField('사용 금액', default=0)
+    budgeted = models.IntegerField('예산 금액', blank=True, null=True)
+    activity = models.IntegerField('사용 금액', blank=True, null=True)
     budget = models.ForeignKey(Budget, related_name='items', on_delete=models.CASCADE, verbose_name='예산')
 
     def __str__(self):
-        return '{} : {} / {}'.format(self.category.name, self.activity, self.budgeted)
+        return '{} {} : {} / {}'.format(self.budget.year_month, self.category.name, self.budgeted, self.activity)
 

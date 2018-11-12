@@ -124,3 +124,5 @@ STATICFILES_DIRS = (
 )
 
 STATIC_ROOT = 'staticfiles'
+
+DATE_FORMAT = 'Y-m'

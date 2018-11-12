@@ -3,21 +3,59 @@
 {% load humanize %}
 
 <div id="budget-detail-page">
-    <a href="{% url 'budget:detail' year=budget.year_month.year month=budget.year_month.month|add:-1 %}">지난달</a>
-    {{ budget.year_month|date:'Y년 M' }}
-    <a href="{% url 'budget:detail' year=budget.year_month.year month=budget.year_month.month|add:1 %}">다음달</a>
-    <div class="budget-status mb-3">
-        <h2>{{ need_budgeted|intcomma }}원</h2>
-        <div >예산 잡을 금액</div>
-        <div>{{ budget.month }}월 자금: {{ funds|intcomma }}원</div>
-        <div>지금까지 예산: {{ budget.budgeted_sum |intcomma }}원</div>
-        <div>사용한 예산: {{ budget.activity_sum |intcomma }}원</div>
+    <div class="row">
+        <div class="col month-selector">
+            <a href="{% url 'budget:detail' year=budget.year_month.year month=budget.year_month.month|add:-1 %}">지난달</a>
+            {{ budget.year_month|date:'Y년 M' }}
+            <a href="{% url 'budget:detail' year=budget.year_month.year month=budget.year_month.month|add:1 %}">다음달</a>
+        </div>
+
+        <div class="col text-right budget-status mb-3">
+            <div class="need-budgeted-section mb-2">
+                <h2 class="mb-0">{{ need_budgeted|intcomma }}원</h2>
+                <div class="text-muted">예산 잡을 금액</div>
+            </div>
+
+            <div class="budget-status-row">
+                <div style="display:inline-block">{{ budget.month }}월 자금:</div><div style="width:120px;display:inline-block">{{ funds|intcomma }}원</div>
+            </div>
+            <div class="budget-status-row">
+                <div style="display:inline-block">지금까지 예산: </div><div style="width:120px;display:inline-block">{{ budget.budgeted_sum |intcomma }}원</div>
+            </div>
+
+
+            <div class=""></div><div class=""></div>
+            </div>
+
+            <!--<div>사용한 예산: {{ budget.activity_sum |intcomma }}원</div>-->
+        </div>
     </div>
 
+
     <div class="category-list-section">
+        <div class="row budget-row">
+            <div class="col-md-4">항목</div>
+            <div class="col-md-4 text-center">금액</div>
+            <div class="col-md-4 text-center">실제금액</div>
+        </div>
         {% for category, item in category_budget_list %}
-        <div class="budget-row">
-            <a href="{% url 'budget:category_update' category.pk %}">{{category.name}}</a> : <a href="{% url 'budget:item_update' pk=item.pk %}">{{item.budgeted|intcomma}}원</a>
+        <div class="row py-1">
+            <div class="col-md-4"><a href="{% url 'budget:category_update' category.pk %}">{{category.name}}</a></div>
+            {% if item %}
+            <div class="col-md-4 text-right">
+                <a href="{% url 'budget:item_update' item.pk %}">{{item.budgeted|default:0|intcomma}}원</a>
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="">{{item.activity|default:0|intcomma}}원</a>
+            </div>
+            {% else %}
+            <div class="col-md-4 text-right">
+                <a href="{% url 'budget:item_create' budget.year_month|date:'Ym' category.pk %}">0원</a>
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="">0원</a>
+            </div>
+            {% endif %}
         </div>
         {% endfor %}
 

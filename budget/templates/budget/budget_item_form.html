@@ -6,7 +6,8 @@
         {% csrf_token %}
         {{ form.as_p }}
         <input class="btn btn-success" type="submit" value="완료">
+        {% if budget_item %}
         <a href="{% url 'budget:detail' year=budget_item.budget.year_month.year month=budget_item.budget.year_month.month%}">취소</a>
-
+        {% endif %}
     </form>
 {% endblock %}
