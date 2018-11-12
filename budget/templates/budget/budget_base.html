@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load humanize %}
+
+<div class="row full-height">
+    <div class="col-md-4 left-panel">
+        <ul class="nav flex-column nav-pills">
+            <li class="nav-item">
+                <a class='nav-link' href='{% url "account:list"  %}'>계정</a>
+            </li>
+            <li class="nav-item">
+                <a class='nav-link' href='{% url "budget:index"  %}'>예산</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-8 right-panel bg-white">
+        {% block budget_content %}
+        {% endblock %}
+    </div>
+</div>
+
+
+{% endblock %}
+{% block script %}
+<script>
+$(function(){
+
+})
+</script>
+{% endblock %}

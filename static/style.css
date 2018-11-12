@@ -1,3 +1,9 @@
+html, body{
+    height:100%;
+}
+.full-height{
+    height:100%;
+}
 a{
     color: rgba(0,0,0,.7);
 }
@@ -5,19 +11,15 @@ a:hover{
     color: rgba(0,0,0, .9);
     text-decoration: none!important;
 }
-
-
 .dropdown{
     display: inline-block;
 }
 
-
-.budget-list-section a{
-    display: contents;
+.category-list-section>.budget-row:first-child{
+    border-top: 1px solid #ebebeb;
 }
 .budget-row{
-    display: flex;
-    align-items: center;
+    border-bottom:1px solid #ebebeb;
 }
 
 .budget-status{
@@ -25,4 +27,23 @@ a:hover{
 .control-row.align-right{
     display: flex;
     justify-content: flex-end;
+}
+
+@media (min-width: 1200px){
+    .container {
+        max-width: 900px;
+    }
+}
+
+@media (min-width: 992px){
+    .container {
+        max-width: 900px;
+    }
+}
+
+
+.budget-meta-section{
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
 }
