@@ -1,5 +1,5 @@
 from django import forms
-from .models import BudgetCategory
+from .models import BudgetCategory, BudgetItem
 
 class BudgetCategoryForm(forms.ModelForm):
 
@@ -10,6 +10,19 @@ class BudgetCategoryForm(forms.ModelForm):
             'name': forms.TextInput(attrs={
                 'autocomplete': 'off',
                 'placeholder': '예산 항목',
+                'class': 'form-control',
+            }),
+        }
+
+class BudgetItemForm(forms.ModelForm):
+
+    class Meta:
+        model = BudgetItem
+        fields = ['budgeted']
+        widgets = {
+            'budgeted': forms.TextInput(attrs={
+                'autocomplete': 'off',
+                'placeholder': '예산 금액',
                 'class': 'form-control',
             }),
         }
