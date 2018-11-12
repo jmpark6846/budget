@@ -18,7 +18,6 @@ now = timezone.now()
 def budget_detail(request, year=now.year, month=now.month):
     _year, _month = int(year), int(month)
 
-    # todo: timedelta로 깔끔하게 만들기
     if _month > 12:
         _year, _month = _year + 1, 1
     elif _month < 1:
@@ -30,10 +29,18 @@ def budget_detail(request, year=now.year, month=now.month):
     request.session['budget_pk']=budget.pk
     accounts = Account.objects.filter(user=request.user)
     funds = reduce(lambda sum, acc: sum+acc.amount, accounts, 0)
+    # budget_items = request.user.categories.budget_items.filter(budget=budget)
+
+    category_budget_list = []
+
+    for c in request.user.categories.order_by('-created'):
+        i = c.budget_items.filter(budget=budget)[0]
+        category_budget_list.append((c, i))
 
     context = {
         'budget': budget,
         'funds': funds,
+        'category_budget_list': category_budget_list,
         'need_budgeted': funds - budget.budgeted_sum()
     }
 
