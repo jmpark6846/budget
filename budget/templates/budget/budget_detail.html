@@ -5,9 +5,9 @@
 <div id="budget-detail-page">
     <div class="row">
         <div class="col month-selector">
-            <a href="{% url 'budget:detail' budget.year_month|date:'Ym' %}">지난달</a>
+            <a href="{% url 'budget:detail' prev_month|date:'Ym' %}">지난달</a>
             {{ budget.year_month|date:'Y년 M' }}
-            <a href="{% url 'budget:detail' budget.year_month|date:'Ym' %}">다음달</a>
+            <a href="{% url 'budget:detail' next_month|date:'Ym' %}">다음달</a>
         </div>
 
         <div class="col text-right budget-status mb-4">

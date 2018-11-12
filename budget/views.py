@@ -7,16 +7,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from account.models import Account
 from functools import reduce
-import datetime
+from datetime import datetime
+from dateutil import relativedelta
 from .models import Budget, BudgetCategory, BudgetItem
 from .forms import BudgetCategoryForm, BudgetItemForm
 
 now = timezone.now().strftime('%Y%m')
 
-# todo year, month를 year_month 객체 하나로 쓰기
 @login_required
 def budget_detail(request, year_month=now):
-    _year_month = datetime.datetime.strptime(year_month, '%Y%m')
+    _year_month = datetime.strptime(year_month, '%Y%m')
     budget, created = Budget.objects.get_or_create(year_month=_year_month, user=request.user)
 
     request.session['budget_pk']=budget.pk
@@ -35,9 +35,10 @@ def budget_detail(request, year_month=now):
         'budget': budget,
         'funds': funds,
         'category_budget_list': category_budget_list,
-        'need_budgeted': funds - budget.budgeted_sum()
+        'need_budgeted': funds - budget.budgeted_sum(),
+        'next_month': _year_month + relativedelta.relativedelta(months=1),
+        'prev_month': _year_month - relativedelta.relativedelta(months=1)
     }
-
     return render(request, 'budget/budget_detail.html', context)
 
 
@@ -50,7 +51,7 @@ def budget_category_create(request, year_month):
             c.user = request.user
             c.save()
 
-            _year_month = datetime.datetime.strptime(year_month, '%Y%m')
+            _year_month = datetime.strptime(year_month, '%Y%m')
             budget, created = Budget.objects.get_or_create(year_month=_year_month, user=request.user)
 
             BudgetItem.objects.create(category=c, budget=budget)
@@ -67,7 +68,7 @@ def budget_category_create(request, year_month):
 
 @login_required
 def budget_items_create(request, year_month, category_pk):
-    _year_month = datetime.datetime.strptime(year_month, '%Y%m')
+    _year_month = datetime.strptime(year_month, '%Y%m')
     if request.method == 'POST':
         form = BudgetItemForm(request.POST)
         if form.is_valid():
