@@ -28,6 +28,19 @@ class AccountCreateView(generic.CreateView):
 
 
 @login_required
+def account_update(request, pk):
+    account = get_object_or_404(Account, pk=pk)
+    form = AccountForm(data=request.POST or None, instance=account)
+
+    if form.is_valid():
+        form.save()
+        return redirect(reverse('account:list'))
+    else:
+        context = {'form': form}
+        return render(request, 'account/account_form.html', context)
+
+
+@login_required
 def account_detail(request, pk):
     account = get_object_or_404(Account, pk=pk, user=request.user)
     context = { 'account': account }

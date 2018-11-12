@@ -8,7 +8,7 @@
     </div>
     <div class="account-list-section">
         {% for account in accounts %}
-        <a href="{% url 'account:detail' account.pk %}">
+        <a href="{% url 'account:update' account.pk %}">
             <div class="card my-4">
                 <div class="card-body ">
                     <h4>{{account.name}}</h4>
