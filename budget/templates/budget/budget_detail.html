@@ -10,7 +10,7 @@
             <a href="{% url 'budget:detail' budget.year_month|date:'Ym' %}">다음달</a>
         </div>
 
-        <div class="col text-right budget-status mb-3">
+        <div class="col text-right budget-status mb-4">
             <div class="need-budgeted-section mb-2">
                 <h2 class="mb-0">{{ need_budgeted|intcomma }}원</h2>
                 <div class="text-muted">예산 잡을 금액</div>
