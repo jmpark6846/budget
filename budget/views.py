@@ -34,7 +34,12 @@ def budget_detail(request, year=now.year, month=now.month):
     category_budget_list = []
 
     for c in request.user.categories.order_by('-created'):
-        i = c.budget_items.filter(budget=budget)[0]
+        filtered = c.budget_items.filter(budget=budget)
+
+        if not filtered.count():
+            continue
+
+        i = filtered[0]
         category_budget_list.append((c, i))
 
     context = {

@@ -51,7 +51,7 @@ class Budget(models.Model):
         return reduce(lambda sum, item: sum + item.activity, self.items.all(), 0)
 
     def __str__(self):
-        return '{}월'.format(self.year_month)
+        return '{}의 {}월'.format(self.user, self.year_month)
 
 
 class BudgetItem(models.Model):
@@ -64,5 +64,5 @@ class BudgetItem(models.Model):
     budget = models.ForeignKey(Budget, related_name='items', on_delete=models.CASCADE, verbose_name='예산')
 
     def __str__(self):
-        return '{} : {} / {}'.format(self.category.name, self.activity, self.budgeted)
+        return '{} {} : {} / {}'.format(self.budget.year_month, self.category.name, self.budgeted, self.activity)
 
