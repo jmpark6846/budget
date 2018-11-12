@@ -7,24 +7,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from account.models import Account
 from functools import reduce
-import datetime
+from datetime import datetime
+from dateutil import relativedelta
 from .models import Budget, BudgetCategory, BudgetItem
 from .forms import BudgetCategoryForm, BudgetItemForm
 
-now = timezone.now()
+now = timezone.now().strftime('%Y%m')
 
-# todo year, month를 year_month 객체 하나로 쓰기
 @login_required
-def budget_detail(request, year=now.year, month=now.month):
-    _year, _month = int(year), int(month)
-
-    if _month > 12:
-        _year, _month = _year + 1, 1
-    elif _month < 1:
-        _year, _month = _year - 1, 12
-
-    year_month = datetime.date(_year, _month, 1)
-    budget, created = Budget.objects.get_or_create(year_month=year_month, user=request.user)
+def budget_detail(request, year_month=now):
+    _year_month = datetime.strptime(year_month, '%Y%m')
+    budget, created = Budget.objects.get_or_create(year_month=_year_month, user=request.user)
 
     request.session['budget_pk']=budget.pk
     accounts = Account.objects.filter(user=request.user)
@@ -35,23 +28,22 @@ def budget_detail(request, year=now.year, month=now.month):
 
     for c in request.user.categories.order_by('-created'):
         filtered = c.budget_items.filter(budget=budget)
-
         i = filtered[0] if filtered.count() else None
-
         category_budget_list.append((c, i))
 
     context = {
         'budget': budget,
         'funds': funds,
         'category_budget_list': category_budget_list,
-        'need_budgeted': funds - budget.budgeted_sum()
+        'need_budgeted': funds - budget.budgeted_sum(),
+        'next_month': _year_month + relativedelta.relativedelta(months=1),
+        'prev_month': _year_month - relativedelta.relativedelta(months=1)
     }
-
     return render(request, 'budget/budget_detail.html', context)
 
 
 @login_required
-def budget_category_create(request, year, month):
+def budget_category_create(request, year_month):
     if request.method == 'POST':
         form = BudgetCategoryForm(request.POST)
         if form.is_valid():
@@ -59,13 +51,8 @@ def budget_category_create(request, year, month):
             c.user = request.user
             c.save()
 
-            _year, _month = int(year), int(month)
-
-            if _month > 12 or _month < 1:
-                return HttpResponseBadRequest()
-
-            year_month = datetime.date(_year, _month, 1)
-            budget, created = Budget.objects.get_or_create(year_month=year_month, user=request.user)
+            _year_month = datetime.strptime(year_month, '%Y%m')
+            budget, created = Budget.objects.get_or_create(year_month=_year_month, user=request.user)
 
             BudgetItem.objects.create(category=c, budget=budget)
             return redirect(reverse('budget:index'))
@@ -81,7 +68,7 @@ def budget_category_create(request, year, month):
 
 @login_required
 def budget_items_create(request, year_month, category_pk):
-    _year_month = datetime.datetime.strptime(year_month, '%Y%m')
+    _year_month = datetime.strptime(year_month, '%Y%m')
     if request.method == 'POST':
         form = BudgetItemForm(request.POST)
         if form.is_valid():
@@ -89,7 +76,7 @@ def budget_items_create(request, year_month, category_pk):
             category = get_object_or_404(BudgetCategory, pk=category_pk, user=request.user)
             item = BudgetItem(budget=budget, category=category, budgeted=form.cleaned_data['budgeted'])
             item.save()
-            return redirect(reverse('budget:detail', kwargs={'year':_year_month.year, 'month':_year_month.month}))
+            return redirect(reverse('budget:detail', kwargs={'year_month':_year_month}))
         else:
             return render(request, 'budget/budget_item_form.html', {'form': form})
     else:
@@ -131,4 +118,4 @@ class BudgetItemUpdateView(LoginRequiredMixin, generic.UpdateView):
         return queryset.filter(budget__user=self.request.user)
 
     def get_success_url(self):
-        return reverse('budget:detail', kwargs={'year':self.object.budget.year_month.year, 'month':self.object.budget.year_month.month})
+        return reverse('budget:detail', kwargs={'year_month':self.object.budget.year_month.strftime('%Y%m')})

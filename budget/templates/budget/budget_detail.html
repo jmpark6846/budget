@@ -5,12 +5,12 @@
 <div id="budget-detail-page">
     <div class="row">
         <div class="col month-selector">
-            <a href="{% url 'budget:detail' year=budget.year_month.year month=budget.year_month.month|add:-1 %}">지난달</a>
+            <a href="{% url 'budget:detail' prev_month|date:'Ym' %}">지난달</a>
             {{ budget.year_month|date:'Y년 M' }}
-            <a href="{% url 'budget:detail' year=budget.year_month.year month=budget.year_month.month|add:1 %}">다음달</a>
+            <a href="{% url 'budget:detail' next_month|date:'Ym' %}">다음달</a>
         </div>
 
-        <div class="col text-right budget-status mb-3">
+        <div class="col text-right budget-status mb-4">
             <div class="need-budgeted-section mb-2">
                 <h2 class="mb-0">{{ need_budgeted|intcomma }}원</h2>
                 <div class="text-muted">예산 잡을 금액</div>
@@ -22,8 +22,6 @@
             <div class="budget-status-row">
                 <div style="display:inline-block">지금까지 예산: </div><div style="width:120px;display:inline-block">{{ budget.budgeted_sum |intcomma }}원</div>
             </div>
-
-
             <div class=""></div><div class=""></div>
             </div>
 
@@ -61,7 +59,7 @@
 
     </div>
     <div class="control-row align-right my-2">
-        <a href="{% url 'budget:category_create' year=budget.year_month.year month=budget.year_month.month %}" class="btn btn-success">생성</a>
+        <a href="{% url 'budget:category_create' budget.year_month|date:'Ym' %}" class="btn btn-success">생성</a>
     </div>
 </div>
 {% endblock %}
