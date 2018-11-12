@@ -95,8 +95,7 @@ class BudgetCategoryViewTestCase(TestCase):
 
     def test_view_can_create_budget_category(self):
         budget_category_data = { 'name': '교통', 'user': self.user}
-        res = self.client.post(reverse('budget:category_create'), budget_category_data)
-        self.assertEqual(res.status_code['budget'].year_month)
+        res = self.client.post(reverse('budget:category_create', kwargs={'year_month':self.budget.year_month.strftime('%Y%m')}), budget_category_data)
         self.assertEqual(res.status_code, 302)  # 생성 성공시 리다이렉트
 
     def test_view_can_update_budget_category(self):

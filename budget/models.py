@@ -15,7 +15,7 @@ class BudgetCategory(models.Model):
     updated = models.DateTimeField('수정날짜', auto_now=True)
 
     def __str__(self):
-        return self.name
+        return '{}의 {}'.format(self.user, self.name)
 
 
 class Budget(models.Model):
