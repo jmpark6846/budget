@@ -9,7 +9,7 @@ from account.models import Account
 from functools import reduce
 import datetime
 from .models import Budget, BudgetCategory, BudgetItem
-from .forms import BudgetCategoryForm
+from .forms import BudgetCategoryForm, BudgetItemForm
 
 now = timezone.now()
 
@@ -96,3 +96,17 @@ class BudgetCategoryDeleteView(LoginRequiredMixin, generic.DeleteView):
     def get_queryset(self):
         queryset = super(BudgetCategoryDeleteView, self).get_queryset()
         return queryset.filter(user=self.request.user)
+
+
+class BudgetItemUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = BudgetItem
+    form_class = BudgetItemForm
+    context_object_name = 'budget_item'
+    template_name = 'budget/budget_item_form.html'
+
+    def get_queryset(self):
+        queryset = super(BudgetItemUpdateView, self).get_queryset()
+        return queryset.filter(budget__user=self.request.user)
+
+    def get_success_url(self):
+        return reverse('budget:detail', kwargs={'year':self.object.budget.year_month.year, 'month':self.object.budget.year_month.month})

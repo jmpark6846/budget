@@ -17,7 +17,7 @@
     <div class="category-list-section">
         {% for category, item in category_budget_list %}
         <div class="budget-row">
-            <a href="{% url 'budget:category_update' category.pk %}">{{category.name}}</a> : {{item.budgeted|intcomma}}원
+            <a href="{% url 'budget:category_update' category.pk %}">{{category.name}}</a> : <a href="{% url 'budget:item_update' pk=item.pk %}">{{item.budgeted|intcomma}}원</a>
         </div>
         {% endfor %}
 
