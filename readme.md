@@ -1,5 +1,5 @@
 # Budget
-개인 예산 관리 웹앱
+개인 예산 관리 웹앱  💸 
 http://budget.2nfjvnb9vu.ap-northeast-2.elasticbeanstalk.com/
 
 매 달마다 예산을 계획하고 자금 흐름을 한 눈에 파악할 수 있게 도와주는 웹 앱입니다.
