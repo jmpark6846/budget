@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% if budget %}
+        <h3>{{budget.name}} 항목 수정</h3>
+    {% endif %}
     <form id='budget-form' method='post'>
         {{ form.media }}
         {% csrf_token %}
