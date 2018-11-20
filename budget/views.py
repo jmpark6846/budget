@@ -119,3 +119,5 @@ class BudgetItemUpdateView(LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         return reverse('budget:detail', kwargs={'year_month':self.object.budget.year_month.strftime('%Y%m')})
+
+
