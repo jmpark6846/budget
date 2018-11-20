@@ -23,7 +23,7 @@ class Budget(models.Model):
     한 달치 예산. 년/월 정보 가진다.
     '''
     year_month = models.DateField('언제', default=timezone.now, unique_for_month=True)
-    user = models.ForeignKey(User, related_name='budgets',on_delete=models.CASCADE, verbose_name='사용자')
+    user = models.ForeignKey(User, related_name='budgets', on_delete=models.CASCADE, verbose_name='사용자')
 
     def save(self, *args, **kwargs):
         created = False

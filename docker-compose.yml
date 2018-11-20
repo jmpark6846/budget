@@ -1,0 +1,20 @@
+version: "3.1"
+services:
+  db:
+    image: mysql:5.6
+    environment:
+      MYSQL_ROOT_PASSWORD: /run/secrets/MYSQL_ROOT_PASSWORD
+    secrets:
+      - MYSQL_ROOT_PASSWORD
+  web:
+    build: .
+    volumes:
+      - .:/app
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+    ports:
+      - 8000:8000
+secrets:
+  MYSQL_ROOT_PASSWORD:
+    external: true
